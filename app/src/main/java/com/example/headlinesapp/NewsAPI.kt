@@ -11,6 +11,7 @@ interface NewsAPI {
     @GET("/v2/everything")
     fun getEverything(
         @Query("q") query: String?,
+        @Query("language") language: String?,
         @Query("page") page: Int?,
         @Query("pageSize") pageSize: Int?
     ): Call<ArticlesResponse>

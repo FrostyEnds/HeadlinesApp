@@ -14,10 +14,9 @@
         android:inputType="text"
         android:id="@+id/search_text"/>
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_results"
-        android:transcriptMode="disabled"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

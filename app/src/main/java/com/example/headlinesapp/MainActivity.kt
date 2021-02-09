@@ -6,22 +6,24 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ArrayAdapter
-import android.widget.ListView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
+
+    var articles = ArrayList<Article>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.main_toolbar))
 
-        var titles = ArrayList<String>()
-        var adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,titles)
-        var listView = findViewById<ListView>(R.id.listView)
-        listView.adapter = adapter
+        val rvTopHeadlines = findViewById<RecyclerView>(R.id.rvTopHeadlines)
+        rvTopHeadlines.adapter = ArticlesAdaptor(articles)
+        rvTopHeadlines.layoutManager = LinearLayoutManager(this)
 
 //        val client = OkHttpClient.Builder()
 //            .addInterceptor(ChuckerInterceptor(this))
@@ -45,9 +47,8 @@ class MainActivity : AppCompatActivity() {
             ) {
                 if(response.isSuccessful){
                     Log.e("MainActivity", "Call Success ${response.body()?.totalResults}")
-                    val iterator = response.body()?.articles?.iterator()
-                    iterator?.forEach { titles.add(it.title) }
-                    adapter.notifyDataSetChanged()
+                    response.body()?.articles?.let { articles.addAll(it) }
+                    rvTopHeadlines.adapter!!.notifyItemInserted(0)
                 }
             }
 

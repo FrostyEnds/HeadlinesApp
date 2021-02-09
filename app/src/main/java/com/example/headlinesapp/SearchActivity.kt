@@ -3,10 +3,10 @@ package com.example.headlinesapp
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.EditorInfo
-import android.widget.ArrayAdapter
 import android.widget.EditText
-import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.headlinesapp.extensions.hideKeyboard
 import retrofit2.Call
 import retrofit2.Callback
@@ -14,16 +14,16 @@ import retrofit2.Response
 
 class SearchActivity : AppCompatActivity() {
 
-    var results = ArrayList<String>()
-    lateinit var listAdapter : ArrayAdapter<String>
+    var results = ArrayList<Article>()
+    lateinit var rvSearchResults : RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        listAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,results)
-        var listView = findViewById<ListView>(R.id.search_results)
-        listView.adapter = listAdapter
+        rvSearchResults = findViewById(R.id.search_results)
+        rvSearchResults.adapter = ArticlesAdaptor(results)
+        rvSearchResults.layoutManager = LinearLayoutManager(this)
 
         val searchText = findViewById<EditText>(R.id.search_text)
         searchText.setOnEditorActionListener { v, actionId, _ ->
@@ -36,7 +36,6 @@ class SearchActivity : AppCompatActivity() {
                 else -> false
             }
         }
-        //searchText.requestFocus()
     }
 
     private fun doSearch(searchText : String) {
@@ -50,9 +49,9 @@ class SearchActivity : AppCompatActivity() {
                 if(response.isSuccessful){
                     Log.d("SearchActivity", "Call Success ${response.body()?.totalResults}")
                     results.clear()
-                    val iterator = response.body()?.articles?.iterator()
-                    iterator?.forEach { results.add(it.title) }
-                    listAdapter.notifyDataSetChanged()
+                    response.body()?.articles?.let { results.addAll(it) }
+                    rvSearchResults.adapter?.let { it.notifyDataSetChanged() }
+                    rvSearchResults.smoothScrollToPosition(0)
                 }
             }
 

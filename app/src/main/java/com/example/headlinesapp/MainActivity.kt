@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object{
         //Number of articles per page requested from NewsAPI
-        const val PAGE_SIZE = 10
+        const val PAGE_SIZE = 25
         //Language of articles requested from NewsAPI
         const val DEFAULT_LANGUAGE = "en"
     }

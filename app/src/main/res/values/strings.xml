@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">HeadlinesApp</string>
+    <string name="app_name">Top Headlines</string>
     <string name="search">search</string>
     <string name="refresh">Refresh</string>
     <string name="source">Source:</string>
+    <string name="no_article_toast">Sorry, article not available.</string>
 </resources>
